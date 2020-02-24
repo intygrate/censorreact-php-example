@@ -1,45 +1,35 @@
-<?php 
+<?php
 
 if(isset($_POST['test-text-api-submit'])) {
     
     // REMEMBER TO SET YOUR API KEY AS $api_key
-    $api_key = 'erg';
+    $api_key = 'oTaY0aacKJ9Ttakp3mUZ83zF1hJjRclm3NxeafVw ';
 
     $content = (isset($_POST['test-text-api-input']) ? $_POST['test-text-api-input'] : '' );
 
-    /* Set the arguments to send through to the API */
-    $args = array(
-        'method' => 'POST', 
-        'body' => json_encode(array(
-            'text' => $content, 
-            'profile' => 'default' 
-        )),
-        'headers' => array(
-            'Content-Type' => 'application/json',
-            'x-api-key' => $api_key  
-        ),
-    );
-
     $curl = curl_init();
 
-    curl_setopt($curl, CURLOPT_POST, 1);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, $args);
-
-    curl_setopt($curl, CURLOPT_URL, 'https://api.censorreact.intygrate.com/v1/text');
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt_array($curl, array(
+      CURLOPT_URL => "https://dev.api.censorreact.intygrate.com/devv1/text",
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_ENCODING => "",
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_TIMEOUT => 30,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => "POST",
+      CURLOPT_POSTFIELDS => '{"text":"' . $content . '","profile":"default"}',
+      CURLOPT_HTTPHEADER => array(
+        "content-type: application/json",
+        "x-api-key: " . $api_key,
+      ),
+    ));
 
     $result = curl_exec($curl);
 
+    print_r($result);
+    $api_result = json_decode($result);
+    
     curl_close($curl);
-
-
-    //Get the result from the API and json_decode it
-    $decoded_body = json_decode($response['body'], true);
-    print_r($decoded_body);
-    $api_result = $decoded_body;
-
-} else {
-  $api_result = '';
 }
 
 ?>
@@ -81,8 +71,8 @@ if(isset($_POST['test-text-api-submit'])) {
 
       <p><?php
         
-        if(isset($apiResult)) {
-          echo $apiResult;
+        if(isset($api_result)) {
+          print("<pre>" . $api_result . "</pre>");
         } else {
           echo 'No text to test';
         }

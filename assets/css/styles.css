@@ -29,10 +29,9 @@ body {
 header {
   text-align: center;
   background-color: #ffffff;
-  height: 55px;
 }
 header img {
-  margin: 0 auto;
+  margin: 10px auto;
   width: 200px;
 }
 
@@ -42,7 +41,7 @@ header img {
   }
 
   header img {
-    width: 200px;
+    width: 250px;
     margin-left: 100px;
   }
 }
@@ -83,6 +82,9 @@ header img {
     padding: 50px;
     font-weight: 400;
     font-size: 1.5em;
+  }
+  .php-demo-title h1{
+    font-weight: 400;
   }
 
   .php-demo-content-inner {
