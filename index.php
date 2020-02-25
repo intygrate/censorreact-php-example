@@ -32,6 +32,17 @@ if(isset($_POST['test-text-api-submit'])) {
     curl_close($curl);
 }
 
+$_SESSION['text-image'] = 'text';
+
+if(isset($_POST['censorreact-text-image'])) {
+  if($_POST['censorreact-text-image'] === 'text') {
+    $_SESSION['text-image'] = 'text';
+  } else if($_POST['censorreact-text-image'] === 'image') {
+    $_SESSION['text-image'] = 'image';
+  } 
+}
+
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -42,6 +53,7 @@ if(isset($_POST['test-text-api-submit'])) {
 
   <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700&display=fallback" rel=stylesheet>
   <link rel="stylesheet" href="assets/css/styles.css">
+  <script defer src="assets/js/scripts.js"></script>
 
 
 </head>
@@ -58,13 +70,49 @@ if(isset($_POST['test-text-api-submit'])) {
 
   <div class='php-demo-content-inner'>
 
-    <h2 class='test-text-api-title'>Test API code</h2>
+    <div class='api-buttons'>
+      <form name='censorreact-text-image' id='censorreact-text-image' method='post'>
+        <button type='submit' class='test-text-api-title <?= ($_SESSION['text-image'] === 'text' ? 'active-text-image' : '') ?>' name='censorreact-text-image' value='text'>Text API</button>
+        <button type='submit' class='test-image-api-title <?= ($_SESSION['text-image'] === 'image' ? 'active-text-image' : '') ?>' name='censorreact-text-image' value='image'>Image API</button>
+        </form>
+    </div>
+    <?php
+    if($_SESSION['text-image'] === 'text'){ ?>
 
-    <form name='test-text-api-form' class='test-text-api-form' method='post'>
-      <label for='test-text-api-input'>Enter Text</label>
-      <textarea type='text' class='test-text-api-input' name='test-text-api-input'></textarea>
-      <button type='submit' class='test-text-api-submit censorreact-btn' name='test-text-api-submit'>Test API</button>
-    </form>
+      <form name='test-text-api-form' class='test-text-api-form' method='post'>
+        <label for='test-text-api-input'>Enter Text</label>
+        <textarea type='text' class='test-text-api-input' name='test-text-api-input'></textarea>
+        <button type='submit' class='test-text-api-submit censorreact-btn' name='test-text-api-submit'>Test Text API</button>
+      </form>
+
+    <?php } else if($_SESSION['text-image'] === 'image') { ?>
+
+      <form name='test-text-api-form' class='test-text-api-form' method='post'>
+        <label for='test-text-api-input'>Enter image</label>
+        <div class='imageCanvas'>
+          <canvas id="imageCanvasPreview">
+            <p>Canvas support needed!</p>
+          </canvas>
+          <div class="input-div">
+            <label for="imageLoader" class="uploadBtn"
+              >Upload
+              <div class="arrow-up"></div>
+              <input
+                class="imageLoader"
+                id="imageLoader"
+                name="imageLoader"
+                type="file"
+                onchange="handleImg(event)"
+                accept="image/*"
+              />
+            </label>
+          </div>
+        </div>
+        <button type='submit' class='test-text-api-submit censorreact-btn' name='test-text-api-submit'>Test Image API</button>
+      </form>
+      <img id="hiddenImg" class="hiddenImg" alt='hiddenImg'/>
+
+    <?php } ?>
 
     <div class='api-result-div'>
       <p class='api-result'>API Result:</p>

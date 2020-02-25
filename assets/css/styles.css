@@ -104,7 +104,19 @@ header img {
 
 /* Text Form Styles */
 
+.api-buttons{
+  display: flex;
+}
+
 .test-text-api-title {
+  background-color: pink;
+  color: rgba(32, 116, 57, 1);
+  font-size: 2em;
+  padding-bottom: 30px;
+}
+
+.test-image-api-title {
+  background-color: pink;
   color: rgba(32, 116, 57, 1);
   font-size: 2em;
   padding-bottom: 30px;
@@ -137,10 +149,42 @@ header img {
 }
 
 @media screen and (min-width: 800px) {
-  .test-text-api-title {
-    color: rgba(32, 116, 57, 1);
-    font-size: 2em;
+  .api-buttons {
+    width: 100%;
   }
+  .api-buttons form{
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 30px;
+    width: 100%;
+  }
+  
+  .test-text-api-title {
+    background-color: #002f50;
+    color: white;
+    font-size: 2em;
+    padding: 20px;
+    flex: 1 1 300px;
+    font-weight: 400;
+    cursor: pointer;
+    border: none;
+  }
+  
+  .test-image-api-title {
+    background-color: #3ec4e0;
+    color: white;
+    font-size: 2em;
+    padding: 20px;
+    flex: 1 1 300px;
+    font-weight: 400;
+    cursor: pointer;
+    border: none;
+  }
+
+  .active-text-image{
+    padding: 30px!important;
+  }
+  
 
   .test-text-api-form {
     text-align: right;
@@ -174,5 +218,26 @@ header img {
     width: 20%;
     text-align: center;
     margin: 20px 0;
+  }
+
+  /* Image Form */
+  .imageCanvas{
+    text-align: center;
+    margin: 0 auto;
+    background-color: pink;
+    display: block;
+    height: 300px;
+    width: 300px;
+  }
+
+  .imageCanvas canvas{
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+    background-color: white;
+  }
+
+  .hiddenImg{
+    display: none;
   }
 }
