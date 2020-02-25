@@ -3,7 +3,7 @@
 if(isset($_POST['test-text-api-submit'])) {
     
     // REMEMBER TO SET YOUR API KEY AS $api_key
-    $api_key = 'oTaY0aacKJ9Ttakp3mUZ83zF1hJjRclm3NxeafVw ';
+    $api_key = 'uRuFUQEnDv1PkRLCVzWPW84MMDZb79zL6p5QUZEz';
 
     $content = (isset($_POST['test-text-api-input']) ? $_POST['test-text-api-input'] : '' );
 
@@ -27,12 +27,51 @@ if(isset($_POST['test-text-api-submit'])) {
     $result = curl_exec($curl);
 
     print_r($result);
-    $api_result = json_decode($result);
+    $api_result = $result;
+    
+    curl_close($curl);
+}
+
+if(isset($_FILES['imageLoader'])) {
+
+    // REMEMBER TO SET YOUR API KEY AS $api_key
+    $api_key = 'uRuFUQEnDv1PkRLCVzWPW84MMDZb79zL6p5QUZEz';
+
+    $file_name = $_FILES['imageLoader']['name'];
+    $file_type = $_FILES['imageLoader']['type'];
+    $file_size = $_FILES['imageLoader']['size'];
+    $file_tmp = $_FILES['imageLoader']['tmp_name'];
+
+    $data = file_get_contents($file_tmp);
+    $base64 = 'data:' . $file_type . ';base64,' . base64_encode($data);
+
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+      CURLOPT_URL => "https://dev.api.censorreact.intygrate.com/devv1/image",
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_ENCODING => "",
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_TIMEOUT => 30,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => "POST",
+      CURLOPT_POSTFIELDS => '{"ImageBytes":"' . $base64 . '","profile":"default"}',
+      CURLOPT_HTTPHEADER => array(
+        "content-type: application/json",
+        "x-api-key: " . $api_key,
+      ),
+    ));
+
+    $result = curl_exec($curl);
+
+    print_r($result);
+    $api_result = $result;
     
     curl_close($curl);
 }
 
 $_SESSION['text-image'] = 'text';
+
 
 if(isset($_POST['censorreact-text-image'])) {
   if($_POST['censorreact-text-image'] === 'text') {
@@ -80,15 +119,15 @@ if(isset($_POST['censorreact-text-image'])) {
     if($_SESSION['text-image'] === 'text'){ ?>
 
       <form name='test-text-api-form' class='test-text-api-form' method='post'>
-        <label for='test-text-api-input'>Enter Text</label>
+        <label for='test-text-api-input' class='text-form-label'>Enter Text</label>
         <textarea type='text' class='test-text-api-input' name='test-text-api-input'></textarea>
-        <button type='submit' class='test-text-api-submit censorreact-btn' name='test-text-api-submit'>Test Text API</button>
+        <button type='submit' class='test-text-api-submit censorreact-btn' name='test-text-api-submit'>Test API</button>
       </form>
 
     <?php } else if($_SESSION['text-image'] === 'image') { ?>
 
-      <form name='test-text-api-form' class='test-text-api-form' method='post'>
-        <label for='test-text-api-input'>Enter image</label>
+      <form name='test-image-api-form' class='test-image-api-form' method='post' enctype="multipart/form-data">
+        <label for='test-image-api-input' class='img-form-label'>Upload image</label>
         <div class='imageCanvas'>
           <canvas id="imageCanvasPreview">
             <p>Canvas support needed!</p>
@@ -96,7 +135,6 @@ if(isset($_POST['censorreact-text-image'])) {
           <div class="input-div">
             <label for="imageLoader" class="uploadBtn"
               >Upload
-              <div class="arrow-up"></div>
               <input
                 class="imageLoader"
                 id="imageLoader"
@@ -108,7 +146,7 @@ if(isset($_POST['censorreact-text-image'])) {
             </label>
           </div>
         </div>
-        <button type='submit' class='test-text-api-submit censorreact-btn' name='test-text-api-submit'>Test Image API</button>
+        <button type='submit' class='test-image-api-submit censorreact-btn' name='test-image-api-submit'>Test API</button>
       </form>
       <img id="hiddenImg" class="hiddenImg" alt='hiddenImg'/>
 
