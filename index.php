@@ -1,86 +1,91 @@
 <?php
 
-if(isset($_POST['test-text-api-submit'])) {
-    
-    // REMEMBER TO SET YOUR API KEY AS $api_key
-    $api_key = 'uRuFUQEnDv1PkRLCVzWPW84MMDZb79zL6p5QUZEz';
-
-    $content = (isset($_POST['test-text-api-input']) ? $_POST['test-text-api-input'] : '' );
-
-    $curl = curl_init();
-
-    curl_setopt_array($curl, array(
-      CURLOPT_URL => "https://dev.api.censorreact.intygrate.com/devv1/text",
-      CURLOPT_RETURNTRANSFER => true,
-      CURLOPT_ENCODING => "",
-      CURLOPT_MAXREDIRS => 10,
-      CURLOPT_TIMEOUT => 30,
-      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-      CURLOPT_CUSTOMREQUEST => "POST",
-      CURLOPT_POSTFIELDS => '{"text":"' . $content . '","profile":"default"}',
-      CURLOPT_HTTPHEADER => array(
-        "content-type: application/json",
-        "x-api-key: " . $api_key,
-      ),
-    ));
-
-    $result = curl_exec($curl);
-
-    print_r($result);
-    $api_result = $result;
-    
-    curl_close($curl);
-}
-
-if(isset($_FILES['imageLoader'])) {
-
-    // REMEMBER TO SET YOUR API KEY AS $api_key
-    $api_key = 'uRuFUQEnDv1PkRLCVzWPW84MMDZb79zL6p5QUZEz';
-
-    $file_name = $_FILES['imageLoader']['name'];
-    $file_type = $_FILES['imageLoader']['type'];
-    $file_size = $_FILES['imageLoader']['size'];
-    $file_tmp = $_FILES['imageLoader']['tmp_name'];
-
-    $data = file_get_contents($file_tmp);
-    $base64 = 'data:' . $file_type . ';base64,' . base64_encode($data);
-
-    $curl = curl_init();
-
-    curl_setopt_array($curl, array(
-      CURLOPT_URL => "https://dev.api.censorreact.intygrate.com/devv1/image",
-      CURLOPT_RETURNTRANSFER => true,
-      CURLOPT_ENCODING => "",
-      CURLOPT_MAXREDIRS => 10,
-      CURLOPT_TIMEOUT => 30,
-      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-      CURLOPT_CUSTOMREQUEST => "POST",
-      CURLOPT_POSTFIELDS => '{"ImageBytes":"' . $base64 . '","profile":"default"}',
-      CURLOPT_HTTPHEADER => array(
-        "content-type: application/json",
-        "x-api-key: " . $api_key,
-      ),
-    ));
-
-    $result = curl_exec($curl);
-
-    print_r($result);
-    $api_result = $result;
-    
-    curl_close($curl);
-}
-
 $_SESSION['text-image'] = 'text';
 
 
 if(isset($_POST['censorreact-text-image'])) {
   if($_POST['censorreact-text-image'] === 'text') {
-    $_SESSION['text-image'] = 'text';
+  $_SESSION['text-image'] = 'text';
   } else if($_POST['censorreact-text-image'] === 'image') {
     $_SESSION['text-image'] = 'image';
   } 
 }
 
+if(isset($_POST['test-image-api-submit'])) {
+  $_SESSION['text-image'] = 'image';
+}
+
+if(isset($_POST['test-text-api-submit']) && $_POST['test-text-api-input']) {
+
+  $_SESSION['text-image'] = 'text';
+  
+  // REMEMBER TO SET YOUR API KEY AS $api_key
+  $api_key = 'uRuFUQEnDv1PkRLCVzWPW84MMDZb79zL6p5QUZEz';
+
+  $content = $_POST['test-text-api-input'];
+
+  $curl = curl_init();
+
+  curl_setopt_array($curl, array(
+    CURLOPT_URL => "https://dev.api.censorreact.intygrate.com/devv1/text",
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => "",
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 30,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => "POST",
+    CURLOPT_POSTFIELDS => '{"text":"' . $content . '","profile":"default"}',
+    CURLOPT_HTTPHEADER => array(
+      "content-type: application/json",
+      "x-api-key: " . $api_key,
+    ),
+  ));
+
+  $result = curl_exec($curl);
+
+  $api_result = json_encode(json_decode($result), JSON_PRETTY_PRINT);
+  
+  curl_close($curl);
+}
+
+if(isset($_FILES['imageLoader']) && $_FILES['imageLoader']['name']) {
+  
+  $_SESSION['text-image'] = 'image';
+  
+  // REMEMBER TO SET YOUR API KEY AS $api_key
+  $api_key = 'uRuFUQEnDv1PkRLCVzWPW84MMDZb79zL6p5QUZEz';
+
+  $file_name = $_FILES['imageLoader']['name'];
+  $file_type = $_FILES['imageLoader']['type'];
+  $file_size = $_FILES['imageLoader']['size'];
+  $file_tmp = $_FILES['imageLoader']['tmp_name'];
+
+  $data = file_get_contents($file_tmp);
+  $base64 = 'data:' . $file_type . ';base64,' . base64_encode($data);
+
+  $curl = curl_init();
+
+  curl_setopt_array($curl, array(
+    CURLOPT_URL => "https://dev.api.censorreact.intygrate.com/devv1/image",
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => "",
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 30,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => "POST",
+    CURLOPT_POSTFIELDS => '{"ImageBytes":"' . $base64 . '","profile":"default"}',
+    CURLOPT_HTTPHEADER => array(
+      "content-type: application/json",
+      "x-api-key: " . $api_key,
+    ),
+  ));
+
+  $result = curl_exec($curl);
+
+  $api_result = json_encode(json_decode($result), JSON_PRETTY_PRINT);
+  
+  curl_close($curl);
+}
 
 ?>
 <!doctype html>
@@ -158,7 +163,9 @@ if(isset($_POST['censorreact-text-image'])) {
       <p><?php
         
         if(isset($api_result)) {
-          print("<pre>" . $api_result . "</pre>");
+          print("<pre>"); 
+          print_r($api_result);
+          print("</pre>");
         } else {
           echo 'No text to test';
         }
